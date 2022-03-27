@@ -16,9 +16,10 @@ Module.register("MMM-JsonValue", {
 		suffix: "\" (from https://api.quotable.io/random)",
 		jsonPath: "content",
 		headers: {},
+		iconTally: false, // If set to true, the value will be processed as a tally of the configured icon.
 		financial: false, // If set to true, value will be processed via Intl.NumberFormat object according to set style, currency and minorUnit  
 		style: 'currency', // Intl.NumberFormat style option
-		currency: 'GBP', // Intl.NumberFormat currency option
+		currency: 'GBP', // aIntl.NumberFormat currency option
 		minorUnits: true, // Set to true if value returned is in pence for example, 250 will be set 2.50 before passing into Intl.NumberFormat
 								
 		refreshInterval: 1000 * 60, // refresh every minute
@@ -48,32 +49,40 @@ Module.register("MMM-JsonValue", {
 		}
         //Process as financial data if set in config
         if (this.config.financial) {
-			//Treat the value as a minorUnit e.g pence. "250" will be converted to "2.50" or "25000" will be "250.00" 
-            if (this.config.minorUnits){
-                var value = this.value / 100;
-            }
-            else {
-                var value = this.value;
-            }
-            
-            // Create the number formatter.
-            var formatter = new Intl.NumberFormat(undefined, {
-            style: this.config.style,
-            currency: this.config.currency,
-            });
+			//Treat the value as a minorUnit e.g pence. "250" will be converted to "2.50" or "25000" wil>
+if (this.config.minorUnits){
+	var value = this.value / 100;
+}
+else {
+	var value = this.value;
+}
 
-            var amount = formatter.format(value); // e.g.£2,500.00
-           
-            wrapper.innerHTML = this.config.prefix + amount + this.config.suffix;
-        }
-        else {
-            wrapper.innerHTML = this.config.prefix + this.value + this.config.suffix;
-        }
+// Create the number formatter.
+var formatter = new Intl.NumberFormat(undefined, {
+style: this.config.style,
+currency: this.config.currency,
+});
 
-	  	if(this.config.icon) {
-	  		wrapper.innerHTML = "<span class=\"" + this.config.icon + "\"></span>" + wrapper.innerHTML;
-	  	}
+var amount = formatter.format(value); // e.g.£2,500.00
 
+wrapper.innerHTML = this.config.prefix + amount + this.config.suffix;
+}
+
+//Create the icon tally
+else if(this.config.iconTally){
+	  var intValue = parseInt(this.value); //convert value from string to integer for the for loop
+	  wrapper.innerHTML = wrapper.innerHTML + this.config.prefix;
+	for (let i = 0; i < intValue; i++) {
+	  wrapper.innerHTML = wrapper.innerHTML + "<span class=\"" + this.config.icon + "\"></span>";
+  }
+	wrapper.innerHTML = wrapper.innerHTML + this.config.suffix;
+}
+else { //otherwise process value as normal
+	wrapper.innerHTML = this.config.prefix + this.value + this.config.suffix;
+	if(this.config.icon) {
+		wrapper.innerHTML = "<span class=\"" + this.config.icon + "\"></span>" + wrapper.innerHTML;
+	} 
+}
 		if(this.config.skipPadding) {
 			wrapper.style = "margin-block-end: -30px;";
 		}
