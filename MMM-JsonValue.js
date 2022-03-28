@@ -17,7 +17,7 @@ Module.register("MMM-JsonValue", {
 		jsonPath: "content",
 		headers: {},
 		iconTally: false, // If set to true, the value will be processed as a tally of the configured icon.
-		NumberFormat: "undefined, { style: 'currency', currency: 'GBP' }"
+		NumberFormat: null // "undefined, { style: 'currency', currency: 'GBP' }",
 					// "en-GB, { style: 'unit', unit: 'miles-per-hour' }"
 		//financial: false, // If set to true, value will be processed via Intl.NumberFormat object according to set style, currency and minorUnit  
 		//style: 'currency', // Intl.NumberFormat style option
