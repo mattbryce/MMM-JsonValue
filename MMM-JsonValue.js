@@ -17,10 +17,12 @@ Module.register("MMM-JsonValue", {
 		jsonPath: "content",
 		headers: {},
 		iconTally: false, // If set to true, the value will be processed as a tally of the configured icon.
-		financial: false, // If set to true, value will be processed via Intl.NumberFormat object according to set style, currency and minorUnit  
-		style: 'currency', // Intl.NumberFormat style option
-		currency: 'GBP', // aIntl.NumberFormat currency option
-		minorUnits: true, // Set to true if value returned is in pence for example, 250 will be set 2.50 before passing into Intl.NumberFormat
+		NumberFormat: "undefined, { style: 'currency', currency: 'GBP' }"
+					// "en-GB, { style: 'unit', unit: 'miles-per-hour' }"
+		//financial: false, // If set to true, value will be processed via Intl.NumberFormat object according to set style, currency and minorUnit  
+		//style: 'currency', // Intl.NumberFormat style option
+		//currency: 'GBP', // aIntl.NumberFormat currency option
+		minorUnits: false, // Used by NumberFormat to return minor units. Set to true if value returned is in pence for example, 250 will be set 2.50 before passing into Intl.NumberFormat
 								
 		refreshInterval: 1000 * 60, // refresh every minute
 	},
@@ -47,9 +49,9 @@ Module.register("MMM-JsonValue", {
 			wrapper.className = "dimmed light small";
 			return wrapper;
 		}
-        //Process as financial data if set in config
-        if (this.config.financial) {
-			//Treat the value as a minorUnit e.g pence. "250" will be converted to "2.50" or "25000" wil>
+        //Process with Intl.NumberFormat if set in config
+        if (this.config.NumberFormat) {
+			//Treat the value as a minorUnit e.g pence. "250" will be converted to "2.50" or "25000" will be "250.00"
 if (this.config.minorUnits){
 	var value = this.value / 100;
 }
@@ -57,15 +59,12 @@ else {
 	var value = this.value;
 }
 
-// Create the number formatter.
-var formatter = new Intl.NumberFormat(undefined, {
-style: this.config.style,
-currency: this.config.currency,
-});
+// Create the number formatter. Will use the default
+var formatter = new Intl.NumberFormat( this.config.NumberFormat );
 
-var amount = formatter.format(value); // e.g.£2,500.00
+var formattedValue = formatter.format(value); // e.g.£2,500.00 or 250000 miles
 
-wrapper.innerHTML = this.config.prefix + amount + this.config.suffix;
+wrapper.innerHTML = this.config.prefix + formattedValue + this.config.suffix;
 }
 
 //Create the icon tally
