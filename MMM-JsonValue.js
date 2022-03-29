@@ -65,6 +65,10 @@ var formatter = new Intl.NumberFormat(undefined, this.config.NumberFormat );
 var formattedValue = formatter.format(value); // e.g.£2,500.00 or 250000 miles
 
 wrapper.innerHTML = this.config.prefix + formattedValue + this.config.suffix;
+
+if(this.config.icon) {
+	wrapper.innerHTML = "<span class=\"" + this.config.icon + "\"></span>" + wrapper.innerHTML;
+} 
 }
 
 //Create the icon tally
