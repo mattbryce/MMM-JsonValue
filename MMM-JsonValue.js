@@ -18,7 +18,7 @@ Module.register("MMM-JsonValue", {
 		headers: {},
 		iconTally: false, // If set to true, the value will be processed as a tally of the configured icon.
 		numberFormat: null, // "undefined, { style: 'currency', currency: 'GBP' }", or "en-GB, { style: 'unit', unit: 'miles-per-hour' }"			
-		numberFormatLocale: "undefined", // "undefined" Uses the the implementation's default locale, change this to a BCP 47 language tag if required
+		numberFormatLocale: undefined, // undefined - Uses the the implementation's default locale, change this to a BCP 47 language tag if required
 		minorUnits: false, // Used by NumberFormat to return minor units. Set to true if value returned is in pence for example, 250 will be set 2.50 before passing into Intl.NumberFormat						
 		refreshInterval: 1000 * 60, // refresh every minute
 	},
